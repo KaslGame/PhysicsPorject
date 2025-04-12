@@ -1,22 +1,22 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerMovement : MonoBehaviour
 {
-    private const string Vertical = nameof(Vertical);
-    private const string Horizontal = nameof(Horizontal);
-
     [SerializeField] private float _speed = 6f;
     [SerializeField] private float _strafeSpeed = 6f;
     [SerializeField] private float _gravityFactor = 2f;
     [SerializeField] private Transform _cameraTransform;
 
-    private Vector3 _verticalVelocity;
     private CharacterController _characterController;
-
+    private PlayerInput _playerInput;
+    private Vector3 _verticalVelocity;
+    
     private void Awake()
     {
         _characterController = GetComponent<CharacterController>();
+        _playerInput = GetComponent<PlayerInput>();
     }
 
     private void Update()
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
         if (_characterController == null)
             return;
 
-        Vector3 playerSpeed = forward * Input.GetAxis(Vertical) * _speed + right * Input.GetAxis(Horizontal) * _strafeSpeed;
+        Vector3 playerSpeed = forward * _playerInput.X * _speed + right * _playerInput.Z * _strafeSpeed;
 
         if (_characterController.isGrounded)
         {
